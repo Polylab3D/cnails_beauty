@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title id="page-title">Pagamento MBWay</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css" />
+  <style id="dynamic-styles">
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg-color);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 20px;
+      padding: 2.25rem 1.75rem 2rem;
+      max-width: 360px;
+      width: 100%;
+      text-align: center;
+      box-shadow: var(--card-shadow);
+    }
+
+    .logo-wrap {
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 1.25rem;
+    }
+
+    .logo-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .title {
+      font-size: 13px;
+      color: #888;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 0.4rem;
+    }
+
+    .phone {
+      font-size: 28px;
+      font-weight: 600;
+      color: #1a1a1a;
+      letter-spacing: 0.05em;
+      margin-bottom: 2rem;
+    }
+
+    .btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      padding: 1rem;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: opacity 0.15s, transform 0.1s;
+      text-decoration: none;
+    }
+
+    .btn:active { transform: scale(0.97); opacity: 0.85; }
+
+    .btn-mbway {
+      background: var(--primary-color);
+      color: #ffffff;
+    }
+
+    .btn-mbway:hover { background: var(--primary-hover); }
+
+    .toast {
+      font-size: 13px;
+      color: var(--primary-color);
+      font-weight: 500;
+      margin-top: 0.85rem;
+      min-height: 18px;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .toast.show { opacity: 1; }
+
+    .divider {
+      width: 100%;
+      height: 1px;
+      background: #f0f0f0;
+      margin: 1.5rem 0;
+    }
+
+    .hint {
+      font-size: 12px;
+      color: #aaa;
+      line-height: 1.8;
+    }
+
+    .hint strong { color: #888; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo-wrap">
+      <img id="logo" src="" alt="" />
+    </div>
+
+    <p class="title" id="label">Número MBWay</p>
+    <p class="phone" id="phone-display">000 000 000</p>
+
+    <button class="btn btn-mbway" id="main-btn" onclick="copiarEAbrirMBWay()">
+      <i class="ti ti-wallet" style="font-size:20px" aria-hidden="true"></i>
+      <span id="btn-text">Copiar e Abrir MB WAY</span>
+    </button>
+
+    <p class="toast" id="toast"></p>
+
+    <div class="divider"></div>
+    <p class="hint">
+      <strong>1.</strong> <span id="step1">Clica no botão</span> &nbsp;·&nbsp;
+      <strong>2.</strong> <span id="step2">No MB WAY → cola o número</span>
+    </p>
+  </div>
+
+  <script src="config.js"></script>
+  <script>
+    // Aplica configurações ao carregar a página
+    document.addEventListener('DOMContentLoaded', () => {
+      // CSS Variables
+      document.documentElement.style.setProperty('--bg-color', CONFIG.theme.backgroundColor);
+      document.documentElement.style.setProperty('--card-bg', CONFIG.theme.cardBackground);
+      document.documentElement.style.setProperty('--card-shadow', CONFIG.theme.cardShadow);
+      document.documentElement.style.setProperty('--primary-color', CONFIG.theme.primaryColor);
+      document.documentElement.style.setProperty('--primary-hover', CONFIG.theme.primaryColorHover);
+
+      // Textos
+      document.getElementById('page-title').textContent = CONFIG.text.pageTitle;
+      document.getElementById('label').textContent = CONFIG.text.label;
+      document.getElementById('phone-display').textContent = CONFIG.mbway.phoneDisplay;
+      document.getElementById('btn-text').textContent = CONFIG.text.buttonText;
+      document.getElementById('step1').textContent = CONFIG.text.step1;
+      document.getElementById('step2').textContent = CONFIG.text.step2;
+
+      // Logo
+      const logo = document.getElementById('logo');
+      logo.src = CONFIG.business.logoFile;
+      logo.alt = CONFIG.business.name;
+    });
+
+function copiarEAbrirMBWay() {
+  const PHONE = CONFIG.mbway.phoneValue;
+
+  // Copia número
+  navigator.clipboard.writeText(PHONE).catch(() => {
+    const el = document.createElement('textarea');
+    el.value = PHONE;
+    el.style.cssText = 'position:fixed;opacity:0;';
+    document.body.appendChild(el);
+    el.focus(); el.select();
+    document.execCommand('copy');
+    document.body.removeChild(el);
+  });
+
+  showToast(CONFIG.text.successMessage);
+
+  const isAndroid = /android/i.test(navigator.userAgent);
+  const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+
+  // Cria botão de abertura visível após copiar
+  const existing = document.getElementById('open-btn');
+  if (existing) existing.remove();
+
+  const openBtn = document.createElement('a');
+  openBtn.id = 'open-btn';
+  openBtn.style.cssText = `
+    display:flex; align-items:center; justify-content:center; gap:10px;
+    width:100%; padding:1rem; border-radius:12px; font-size:16px;
+    font-weight:600; cursor:pointer; text-decoration:none; margin-top:12px;
+    background:var(--primary-color); color:#fff;
+  `;
+  openBtn.textContent = '→ Abrir MB WAY agora';
+
+  const ANDROID_STORE = 'https://play.google.com/store/apps/details?id=pt.sibs.android.mbway';
+  const IOS_STORE = 'https://apps.apple.com/pt/app/mb-way/id918126133';
+
+  openBtn.addEventListener('click', function (e) {
+    e.preventDefault();
+    if (isAndroid) {
+      window.location.href = ANDROID_STORE;
+    } else if (isIOS) {
+      // iOS abre a app diretamente via scheme
+      const start = Date.now();
+      window.location.href = 'mbway://';
+      setTimeout(function () {
+        if (Date.now() - start < 3000) {
+          window.location.href = IOS_STORE;
+        }
+      }, 2000);
+    } else {
+      window.location.href = 'https://www.mbway.pt';
+    }
+  });
+
+  // Insere depois do botão principal
+  document.getElementById('main-btn').insertAdjacentElement('afterend', openBtn);
+}
+
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 3000);
+    }
+  </script>
+</body>
+</html>
