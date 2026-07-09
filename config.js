@@ -9,7 +9,7 @@ const CONFIG = {
   // INFORMAÇÕES DO NEGÓCIO
   // ==========================================
   business: {
-    name: '✨ CN Beauty Lounge ',              // Nome que aparece no topo da página
+    name: '✨ CN BEAUTY LOUNGE ',              // Nome que aparece no topo da página
     bio: 'Nails & Makeup Artist',          // Descrição curta abaixo do nome
     logoFile: 'logo.svg',                  // Nome do arquivo do logo (deixe na mesma pasta)
   },
