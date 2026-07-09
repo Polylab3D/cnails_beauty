@@ -9,7 +9,7 @@ const CONFIG = {
   // INFORMAÇÕES DO NEGÓCIO
   // ==========================================
   business: {
-    name: 'CN Beauty Lounge',              // Nome que aparece no topo da página
+    name: '✨ CN Beauty Lounge ',              // Nome que aparece no topo da página
     bio: 'Nails & Makeup Artist',          // Descrição curta abaixo do nome
     logoFile: 'logo.svg',                  // Nome do arquivo do logo (deixe na mesma pasta)
   },
@@ -30,7 +30,12 @@ const CONFIG = {
       text: 'Instagram',                   // Texto do botão
       url: 'https://www.instagram.com/carolinamarques_beautylounge/',  // Instagram da cliente
       icon: 'brand-instagram'              // Ícone
-    }
+    },
+    {
+      text: 'Morada',
+      url: 'https://maps.app.goo.gl/fdoBuKoz8pzcJPV48',
+      icon: 'ti ti-map-pin'
+    },
   ],
 
   // ==========================================
