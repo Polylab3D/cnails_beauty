@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#c7b093" />
+  <title id="page-title">CM Beauty Lounge</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-secondary);
+      background: var(--bg-color);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+    }
+
+    .container {
+      max-width: 680px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .profile-image {
+      width: 350px;
+      height: 350px;
+      margin: 0 auto 0.5rem;
+      border-radius: 50%;
+      overflow: hidden;
+      border: none;
+      box-shadow: none;
+      background: transparent;
+    }
+
+    .profile-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .title {
+      font-family: var(--font-primary);
+      font-size: 28px;
+      font-weight: 300;
+      color: var(--text-color);
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.3em;
+    }
+
+    .bio {
+      font-family: var(--font-secondary);
+      font-size: 16px;
+      font-weight: 300;
+      color: var(--text-secondary);
+      margin-bottom: 2rem;
+      line-height: 1.5;
+      letter-spacing: 0.15em;
+    }
+
+    .links {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-bottom: 2rem;
+    }
+
+    .link-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      width: 100%;
+      padding: 16px 20px;
+      background: var(--link-bg);
+      border: 2px solid var(--link-border);
+      border-radius: var(--link-radius);
+      color: var(--link-text);
+      font-family: var(--font-secondary);
+      font-size: 16px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      box-shadow: var(--link-shadow);
+    }
+
+    .link-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+      background: var(--link-hover-bg);
+      color: var(--link-hover-text);
+    }
+
+    .link-btn:active {
+      transform: translateY(0);
+    }
+
+    .link-btn i {
+      font-size: 22px;
+    }
+
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 4rem;
+      margin-bottom: 1rem;
+    }
+
+    .social-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      background: var(--social-bg);
+      border: none;
+      border-radius: 0;
+      color: var(--social-text);
+      text-decoration: none;
+      transition: all 0.2s ease;
+      box-shadow: none;
+    }
+
+    .social-btn:hover {
+      color: var(--social-hover-text);
+    }
+
+    .social-btn i {
+      font-size: 20px;
+    }
+
+    .footer {
+      font-family: var(--font-secondary);
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="profile-image">
+      <img id="logo" src="" alt="" />
+    </div>
+
+    <h1 class="title" id="business-name">CM Beauty Lounge</h1>
+    <p class="bio" id="bio-text">Nail & Makeup Artist</p>
+
+    <div class="links" id="links-container"></div>
+
+    <div class="social-links" id="social-links"></div>
+
+    <div class="footer">
+      <p id="footer-text">© 2024 CM Beauty Lounge</p>
+    </div>
+  </div>
+
+  <script src="config.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const root = document.documentElement;
+      Object.entries(CONFIG.theme).forEach(([key, value]) => {
+        root.style.setProperty(`--${key}`, value);
+      });
+
+      document.getElementById('page-title').textContent = CONFIG.business.name;
+
+      const logo = document.getElementById('logo');
+      logo.src = CONFIG.business.logoFile;
+      logo.alt = CONFIG.business.name;
+
+      document.getElementById('business-name').textContent = CONFIG.business.name;
+      document.getElementById('bio-text').textContent = CONFIG.business.bio;
+
+      const linksContainer = document.getElementById('links-container');
+      CONFIG.links.forEach(link => {
+        const a = document.createElement('a');
+        a.href = link.url;
+        a.className = 'link-btn';
+        a.target = '_blank';
+        a.rel = 'noopener noreferrer';
+
+        const icon = document.createElement('i');
+        icon.className = `ti ti-${link.icon}`;
+
+        const text = document.createElement('span');
+        text.textContent = link.text;
+
+        a.appendChild(icon);
+        a.appendChild(text);
+        linksContainer.appendChild(a);
+      });
+
+      const socialContainer = document.getElementById('social-links');
+      CONFIG.socialLinks.forEach(social => {
+        const a = document.createElement('a');
+        a.href = social.url;
+        a.className = 'social-btn';
+        a.target = '_blank';
+        a.rel = 'noopener noreferrer';
+        a.title = social.name;
+
+        const icon = document.createElement('i');
+        icon.className = `ti ti-brand-${social.icon}`;
+
+        a.appendChild(icon);
+        socialContainer.appendChild(a);
+      });
+
+      document.getElementById('footer-text').textContent = CONFIG.footer.text;
+    });
+  </script>
+</body>
+</html>
