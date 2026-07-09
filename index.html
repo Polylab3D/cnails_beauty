@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title id="page-title">CM Beauty Lounge</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1.25rem;
+      background: var(--background-color);
+      font-family: Georgia, 'Times New Roman', serif;
+      color: var(--text-color);
+    }
+
+    .container {
+      width: min(100%, 520px);
+      text-align: center;
+    }
+
+    .logo-wrap {
+      width: 132px;
+      height: 132px;
+      margin: 0 auto 1.35rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .title {
+      font-size: clamp(28px, 7vw, 42px);
+      font-weight: 400;
+      line-height: 1.1;
+      margin-bottom: 0.35rem;
+      color: var(--title-color);
+    }
+
+    .subtitle {
+      font-size: 15px;
+      line-height: 1.5;
+      color: var(--subtitle-color);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 2.25rem;
+    }
+
+    .links {
+      display: grid;
+      gap: 0.85rem;
+    }
+
+    .link-btn {
+      min-height: 64px;
+      display: grid;
+      grid-template-columns: 52px 1fr 52px;
+      align-items: center;
+      width: 100%;
+      padding: 0 1rem;
+      background: var(--button-bg);
+      border: 1px solid var(--button-border);
+      border-radius: var(--button-radius);
+      box-shadow: var(--button-shadow);
+      color: var(--button-text);
+      text-decoration: none;
+      transition: transform 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .link-btn:hover {
+      background: var(--button-hover-bg);
+      box-shadow: var(--button-hover-shadow);
+      transform: translateY(-1px);
+    }
+
+    .link-btn:active {
+      transform: translateY(0);
+    }
+
+    .link-icon {
+      width: 25px;
+      height: 25px;
+      justify-self: start;
+      background: var(--icon-color);
+      -webkit-mask: var(--icon-url) center / contain no-repeat;
+      mask: var(--icon-url) center / contain no-repeat;
+    }
+
+    .link-text {
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--button-text);
+      justify-self: center;
+    }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <div class="logo-wrap">
+      <img id="logo" src="" alt="" />
+    </div>
+
+    <h1 class="title" id="business-name">CM Beauty Lounge</h1>
+    <p class="subtitle" id="business-subtitle">Nail &amp; Makeup Artist</p>
+
+    <div class="links" id="links-container"></div>
+  </main>
+
+  <script src="config.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const root = document.documentElement;
+
+      Object.entries(CONFIG.theme).forEach(([key, value]) => {
+        root.style.setProperty(`--${key}`, value);
+      });
+
+      document.getElementById('page-title').textContent = CONFIG.business.pageTitle;
+      document.getElementById('business-name').textContent = CONFIG.business.name;
+      document.getElementById('business-subtitle').textContent = CONFIG.business.subtitle;
+
+      const logo = document.getElementById('logo');
+      logo.src = CONFIG.business.logoFile;
+      logo.alt = CONFIG.business.name;
+
+      const linksContainer = document.getElementById('links-container');
+      CONFIG.links.forEach(link => {
+        const a = document.createElement('a');
+        a.href = link.url;
+        a.className = 'link-btn';
+        a.target = '_blank';
+        a.rel = 'noopener noreferrer';
+        a.setAttribute('aria-label', link.text);
+
+        const icon = document.createElement('span');
+        icon.className = 'link-icon';
+        icon.style.setProperty('--icon-url', `url("${link.iconFile}")`);
+
+        const text = document.createElement('span');
+        text.className = 'link-text';
+        text.textContent = link.text;
+
+        const spacer = document.createElement('span');
+        spacer.setAttribute('aria-hidden', 'true');
+
+        a.appendChild(icon);
+        a.appendChild(text);
+        a.appendChild(spacer);
+        linksContainer.appendChild(a);
+      });
+    });
+  </script>
+</body>
+</html>
